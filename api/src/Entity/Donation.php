@@ -22,10 +22,10 @@ class Donation
     #[ORM\Column(length: 255)]
     private ?string $payment = null;
 
-    #[ORM\ManyToOne(inversedBy:'donors')]
+    #[ORM\ManyToOne(inversedBy:'donor')]
     #[Assert\NotNull]
     public ?Donor $donor = null;
-    
+
     public function getId(): ?int
     {
         return $this->id;
