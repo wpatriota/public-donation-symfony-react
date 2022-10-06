@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\DonationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(mercure: true)]
+//#[ApiResource(mercure: true)]
+#[ApiResource]
 #[ORM\Entity(repositoryClass: DonationRepository::class)]
 class Donation
 {
@@ -19,12 +21,20 @@ class Donation
     #[ORM\Column]
     private ?float $donation_value = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type:'text')]
     private ?string $payment = null;
 
-    #[ORM\ManyToOne(inversedBy:'donor')]
-    #[Assert\NotNull]
+    #[ORM\ManyToOne(inversedBy:'donations')]
+    //#[Assert\NotNull]
     public ?Donor $donor = null;
+
+    //#[ORM\OneToMany(targetEntity: InstallmentsDonation::class, mappedBy: 'Donation')]
+    //public $installmentsDonations;
+
+    /*public function __construct()
+    {
+        $this->installmentsDonations = new ArrayCollection();
+    }*/
 
     public function getId(): ?int
     {

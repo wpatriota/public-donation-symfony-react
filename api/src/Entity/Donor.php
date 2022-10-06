@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\DonorRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(mercure: true)]
+//#[ApiResource(mercure: true)]
+#[ApiResource]
 #[ORM\Entity(repositoryClass: DonorRepository::class)]
 class Donor
 {
@@ -16,17 +18,23 @@ class Donor
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type:'text')]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type:'text')]
+    #[Assert\Email]
     private ?string $email = null;
 
-    #[ORM\Column]
-    private ?float $donation_value = null;
+    //#[ORM\Column(type:'text')]
+    //private ?string $status = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    #[ORM\OneToMany(targetEntity: Donation::class, mappedBy: 'donor', cascade:['persist', 'remove'])]
+    public iterable $donations;
+
+    public function __construct()
+    {
+        //$this->donations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -53,30 +61,6 @@ class Donor
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getDonationValue(): ?float
-    {
-        return $this->donation_value;
-    }
-
-    public function setDonationValue(float $donation_value): self
-    {
-        $this->donation_value = $donation_value;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
 
         return $this;
     }
